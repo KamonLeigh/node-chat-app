@@ -16,7 +16,23 @@ const port = process.env.PORT || 3000;
 io.on('connection',(socket)=>{
     console.log('New user connected');
 
+    //socket.emit from admn text welcome to the chat app
+    //socket.broadcast.emit from Admin text New user joined
     
+    socket.emit('newMessage',{
+        from:'admin',
+        text:'Welcome to the chat app',
+        createdAt:new Date().getTime()
+    })
+
+    socket.broadcast.emit('newMessage',{
+        from:'admin',
+        text:'New user joined',
+        createdAt:new Date().getTime()
+    })
+
+
+
     // socket.emit('newMessage',{
     //     from:'john',
     //     text:'Hey, there!',
@@ -30,6 +46,11 @@ io.on('connection',(socket)=>{
             text:message.text,
             createdAt: new Date().getTime()
         });
+        // socket.broadcast.emit('newMessage',{
+        //     form:message.from,
+        //     text:message.text,
+        //     createdAt: new Date().getTime()
+        // })
     });
     socket.on('disconnect',()=>{
         console.log('User disconnected');
