@@ -16,12 +16,21 @@ const port = process.env.PORT || 3000;
 io.on('connection',(socket)=>{
     console.log('New user connected');
 
+    
+    socket.emit('newMessage',{
+        from:'john',
+        text:'Hey, there!',
+        createdAt:123,
+    });
+
+    socket.on('createMessage', (message)=>{
+        console.log('create Message', message);
+    });
     socket.on('disconnect',()=>{
         console.log('User disconnected');
-    })
-})
+    });
 
-
+});
 
 
 server.listen(port,()=>{
