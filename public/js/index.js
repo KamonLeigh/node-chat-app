@@ -15,6 +15,20 @@ let socket = io(); //Making an request from the client to the server to open a w
 
         socket.on('newMessage',function(message){
             console.log('New message', message);
+            let li = $('<li></li>');
+            li.text(`${message.from}:${message.text}`);
+
+            $('#messages').append(li);
         })
 
-      
+
+      $('#message-form').on('submit',function(e){
+        e.preventDefault();
+
+        socket.emit('createMessage',{
+            from:'User',
+            text:$('[name=message').val()
+        }, function(){
+
+        });
+      });
