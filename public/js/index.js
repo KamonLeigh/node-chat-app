@@ -1,6 +1,24 @@
 
 
 let socket = io(); //Making an request from the client to the server to open a websocket and keep it open
+       
+function scrollToBottom(){
+    //selectors 
+    const messages = $('#messages');
+    const newMessage = messages.children('li:last-child');
+    //Height
+    const clientHeight = messages.prop('clientHeight');
+    const scrollTop = messages.prop('scrollTop');
+    const scrollHeight = messages.prop('scrollHeight');
+    const newMessageHeight = newMessage.innerHeight();
+    const lastMessageHeight = newMessage.prev().innerHeight();
+
+    if(clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight){
+        messages.scrollTop(scrollHeight);
+    }
+
+}
+            
         socket.on('connect',function(){
             console.log('connected to server');
             
@@ -25,13 +43,7 @@ let socket = io(); //Making an request from the client to the server to open a w
            });
 
            $('#messages').append(html);
-           
-            // console.log('New message', message);
-            // let formattedTime = moment(message.createdAt).format('h:mm a');
-            // let li = $('<li></li>');
-            // li.text(`${message.from} ${formattedTime}: ${message.text}`);
-
-            // $('#messages').append(li);
+            scrollToBottom();
         })
 
         socket.on('newLocationMessage', function(message){
@@ -53,6 +65,7 @@ let socket = io(); //Making an request from the client to the server to open a w
             // a.attr('href', message.url);
             // li.append(a);
             // $('#messages').append(li);
+            scrollToBottom();
         });
 
 
