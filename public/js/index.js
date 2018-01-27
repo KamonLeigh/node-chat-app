@@ -16,23 +16,43 @@ let socket = io(); //Making an request from the client to the server to open a w
 
 
         socket.on('newMessage',function(message){
-            console.log('New message', message);
-            let formattedTime = moment(message.createdAt).format('h:mm a');
-            let li = $('<li></li>');
-            li.text(`${message.from} ${formattedTime}: ${message.text}`);
+           let formattedTime = moment(message.createdAt).format('h:mm a');
+            let template = $('#message-template').html();
+           let html = Mustache.render(template,{
+               text: message.text,
+               from: message.from,
+               createdAt: formattedTime
+           });
 
-            $('#messages').append(li);
+           $('#messages').append(html);
+           
+            // console.log('New message', message);
+            // let formattedTime = moment(message.createdAt).format('h:mm a');
+            // let li = $('<li></li>');
+            // li.text(`${message.from} ${formattedTime}: ${message.text}`);
+
+            // $('#messages').append(li);
         })
 
         socket.on('newLocationMessage', function(message){
             let formattedTime = moment(message.createdAt).format('h:mm a');
-            let li = $('<li></li>');
-            let a = $('<a target="_blank">My current location</a>');
+            let template = $('#location-message-template').html();
 
-            li.text(`${message.from} ${formattedTime}: `);
-            a.attr('href', message.url);
-            li.append(a);
-            $('#messages').append(li);
+            let html = Mustache.render(template,{
+                from: message.from,
+                url: message.url,
+                createdAt: formattedTime
+            })
+
+            $('#messages').append(html);
+            // let formattedTime = moment(message.createdAt).format('h:mm a');
+            // let li = $('<li></li>');
+            // let a = $('<a target="_blank">My current location</a>');
+
+            // li.text(`${message.from} ${formattedTime}: `);
+            // a.attr('href', message.url);
+            // li.append(a);
+            // $('#messages').append(li);
         });
 
 
